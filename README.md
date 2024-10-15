@@ -1,66 +1,28 @@
-## Foundry
+# Pure entrypoint ERC-1967 proxy for UUPS upgradeable contracts - deployment example
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Example of https://github.com/radeksvarz/erc1967uupsentrypoint
 
-Foundry consists of:
+Deployed on Sepolia: https://eth-sepolia.blockscout.com/address/0xC0bf4d3F67B0B516930B28A90fe4022F20bEbE96?tab=contract
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+Uses Create-X CREATE3 deployment script to ensure Entrypoint is deployed to the same address among chains when compiler output changes in time. Beware of setting up proper `--sender` when invoking `forge script`, otherwise deployed address does not match.
 
-## Documentation
+Example implementation uses ERC-7201 storage to mitigate upgrade storage issues.
 
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
 ```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+ ┌──────────────────┐
+ │ Entrypoint       │
+ ├──────────────────┤
+ │                  │
+ │ (ERC1967 proxy)  │
+ │                  │
+ └─────────┬────────┘
+           │
+           │ delegatecall
+           │
+ ┌─────────▼──────────────┐
+ │ Implementation         │
+ │                        │
+ │ (UUPS based contract)  │
+ │                        │
+ └────────────────────────┘
 ```
