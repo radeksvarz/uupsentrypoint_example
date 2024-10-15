@@ -96,7 +96,10 @@ contract Deploy is Script, CreateXScript, WithStyle {
 
         console2.log(greencheck("Entrypoint deployed contract address:", entrypoint));
 
-        require(computedAddress == entrypoint, red("Computed and deployed entrypoint address do not match! Check sender arg."));
+        require(
+            computedAddress == entrypoint,
+            red("Computed and deployed entrypoint address do not match! Check sender arg.")
+        );
 
         // For forge verify-contract --constructor-args
         console2.log("--constructor-args ", vm.toString(abi.encode(implementation, initializeData)));
